@@ -1,17 +1,35 @@
 import { Title, Text, TextInput, Select, Box, Group, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import axios from 'axios';
 import useStyles from '../Welcome/Welcome.styles';
+
+type TBookProps = {
+  judul: string;
+  penulis: string;
+  kategori: string;
+};
 
 export function CreateBook() {
   const { classes } = useStyles();
 
   const form = useForm({
     initialValues: {
-      title: '',
-      author: '',
-      category: '',
+      judul: '',
+      penulis: '',
+      kategori: '',
     },
   });
+
+  const onHandlerSubmit = (values: TBookProps) => {
+    axios
+      .post('https://2089-2001-448a-4046-239d-6dfb-73ae-ee9b-db1.ap.ngrok.io/book', values)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -24,21 +42,23 @@ export function CreateBook() {
       <Text color="dimmed" align="center" size="lg" sx={{ maxWidth: 580 }} mx="auto" mt="xl">
         Create your new book! Provide a title, author, and choose a category.
       </Text>
-      <Box maw={300} mx="auto">
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <Box maw={580} mx="auto">
+        <form onSubmit={form.onSubmit((values) => onHandlerSubmit(values))}>
           <TextInput
             label="Title"
             placeholder="Harry Potter"
             classNames={classes}
             data-cy="book-title"
-            {...form.getInputProps('title')}
+            my="lg"
+            {...form.getInputProps('judul')}
           />
           <TextInput
             label="Author"
             placeholder="JK Rowling"
             classNames={classes}
+            mb="lg"
             data-cy="book-author"
-            {...form.getInputProps('author')}
+            {...form.getInputProps('penulis')}
           />
           <Select
             mt="md"
@@ -48,7 +68,7 @@ export function CreateBook() {
             label="Category"
             classNames={classes}
             data-cy="book-category"
-            {...form.getInputProps('category')}
+            {...form.getInputProps('kategori')}
           />
           <Group position="center" mt="md">
             <Button type="submit">Submit</Button>
