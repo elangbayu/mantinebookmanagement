@@ -1,5 +1,7 @@
 import { Title, Text, TextInput, Select, Box, Group, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import { IconX } from '@tabler/icons';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -41,18 +43,30 @@ export function UpdateBook() {
   }, []);
 
   const onHandlerSubmit = (values: TBookProps) => {
-    const props = {
-      id,
-      ...values,
-    };
-
     axios
-      .put(`https://2089-2001-448a-4046-239d-6dfb-73ae-ee9b-db1.ap.ngrok.io/book/${id}`, props)
+      .put(`https://2089-2001-448a-4046-239d-6dfb-73ae-ee9b-db1.ap.ngrok.io/book/${id}`, values)
       .then(function (response) {
-        console.log(response);
+        notifications.show({
+          id: 'success-update',
+          withCloseButton: true,
+          autoClose: 5000,
+          title: 'Success',
+          message: 'Berhasil mengupdate buku',
+          color: 'blue',
+          loading: false,
+        });
       })
       .catch(function (error) {
-        console.log(error);
+        notifications.show({
+          id: 'error-update',
+          withCloseButton: true,
+          autoClose: 5000,
+          title: 'Error',
+          message: 'Gagal mengupdate buku',
+          color: 'red',
+          icon: <IconX />,
+          loading: false,
+        });
       });
   };
 
