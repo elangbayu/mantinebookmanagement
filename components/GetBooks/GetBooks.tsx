@@ -19,16 +19,21 @@ export function GetBooks() {
   const [books, setBooks] = useState<Array<TBookProps>>([]);
 
   useEffect(() => {
+    getAllBooks();
+  }, []);
+
+  const getAllBooks = () => {
     axios
       .get('https://2089-2001-448a-4046-239d-6dfb-73ae-ee9b-db1.ap.ngrok.io/books')
       .then((response) => setBooks(response.data))
       .catch((error) => console.log(error));
-  }, []);
+  };
 
   const onDeleteBook = (id: string) => {
     axios
       .delete(`https://2089-2001-448a-4046-239d-6dfb-73ae-ee9b-db1.ap.ngrok.io/book?id=${id}`)
       .then(function (response) {
+        getAllBooks();
         notifications.show({
           id: 'success-create',
           withCloseButton: true,
