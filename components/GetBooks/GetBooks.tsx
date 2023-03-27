@@ -16,6 +16,17 @@ export function GetBooks() {
 
   const [books, setBooks] = useState<Array<TBookProps>>([]);
 
+  useEffect(() => {
+    axios
+      .get('https://2089-2001-448a-4046-239d-6dfb-73ae-ee9b-db1.ap.ngrok.io/books')
+      .then((response) => setBooks(response.data))
+      .catch((error) => console.log(error));
+  }, []);
+
+  const onDeleteBook = (id: string) => {
+    console.log(id);
+  };
+
   const rows = books.map((item) => (
     <tr key={item.id}>
       <td>{item.id}</td>
@@ -31,19 +42,12 @@ export function GetBooks() {
             Update
           </Button>
         </Link>
-        <Button color="red" variant="outline">
+        <Button onClick={() => onDeleteBook(item.id)} color="red" variant="outline">
           Delete
         </Button>
       </td>
     </tr>
   ));
-
-  useEffect(() => {
-    axios
-      .get('https://2089-2001-448a-4046-239d-6dfb-73ae-ee9b-db1.ap.ngrok.io/books')
-      .then((response) => setBooks(response.data))
-      .catch((error) => console.log(error));
-  }, []);
 
   return (
     <>
